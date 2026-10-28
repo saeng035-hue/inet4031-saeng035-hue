@@ -24,7 +24,14 @@ spec:
         - envFrom:
             - configMapRef:
                 name: env
-          image: week-4-web:latest
+          securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image: week-4-web:latest
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
