@@ -22,6 +22,28 @@ resource "kubernetes_deployment_v1" "web" {
           image             = "docker.io/library/week-4-web:latest"
           image_pull_policy = "IfNotPresent"
 
+          security_context {
+            run_as_non_root            = true
+            run_as_user                = 10001
+            allow_privilege_escalation = false
+
+            capabilities {
+              drop = ["ALL"]
+            }
+          }
+
+          resources {
+            requests = {
+              cpu    = "100m"
+              memory = "128Mi"
+            }
+
+            limits = {
+              cpu    = "500m"
+              memory = "256Mi"
+            }
+          }
+
           port {
             container_port = 5000
           }
