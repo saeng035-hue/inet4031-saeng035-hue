@@ -25,7 +25,7 @@ resource "kubernetes_deployment_v1" "web" {
           security_context {
             run_as_non_root            = true
             run_as_user                = 10001
-            allow_privilege_escalation = false
+            allow_privilege_escalation = true
 
             capabilities {
               drop = ["ALL"]
