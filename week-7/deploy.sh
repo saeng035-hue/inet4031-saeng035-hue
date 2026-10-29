@@ -92,9 +92,25 @@ fi
 
 log "deploying ${NEW:0:7}"
 
-log "step 1 of 2: tofu apply in week-5"
-(cd week-5 && tofu init -input=false && tofu apply -auto-approve -input=false -lock-timeout=60s)
+log "step 1 of 2: plan and approve OpenTofu changes in week-5"
+(
+  cd week-5
+  tofu init -input=false
 
+  plan_file="$(mktemp "${TMPDIR:-/tmp}/week8.XXXXXX.tfplan")"
+  trap 'rm -f "$plan_file"' EXIT
+
+  tofu plan -input=false -lock-timeout=60s -out="$plan_file"
+  tofu show "$plan_file"
+
+  read -r -p "Review the plan. Type yes to approve and apply: " confirm
+  if [ "$confirm" != "yes" ]; then
+    echo "Deployment cancelled. No changes applied."
+    exit 1
+  fi
+
+  tofu apply -input=false -lock-timeout=60s "$plan_file"
+)
 log "step 2 of 2: helm upgrade for prometheus"
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts --force-update
 helm repo update prometheus-community
