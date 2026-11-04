@@ -1,7 +1,6 @@
-
-resource "kubernetes_network_policy_v1" "db" {
+resource "kubernetes_network_policy_v1" "db_clients" {
   metadata {
-    name = "db-allow-web"
+    name = "db-allow-clients"
   }
 
   spec {
@@ -18,6 +17,14 @@ resource "kubernetes_network_policy_v1" "db" {
         pod_selector {
           match_labels = {
             app = "web"
+          }
+        }
+      }
+
+      from {
+        pod_selector {
+          match_labels = {
+            app = "db-exporter"
           }
         }
       }
