@@ -1,0 +1,4 @@
+]633;E;python3 --version;da1dcade-e8f4-4b99-b318-7a08e538e4b8]633;CPython 3.14.4
+Client Version: v1.36.4+k3s1
+Kustomize Version: v5.8.1
+pip 25.1.1 from /home/thai/data-science-venv/lib/python3.14/site-packages/pip (python 3.14)
